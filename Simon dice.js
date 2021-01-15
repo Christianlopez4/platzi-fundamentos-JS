@@ -12,11 +12,12 @@ const verde = document.getElementById('verde');
     }
 
     inicializar() {
-      btnEmpezar.classList.add('hide');
-      this.nivel = 1;
-      this.colores = {
-          celeste, violeta, naranja, verde
-      }
+        this.elegirColor = this.elegirColor.bind(this);
+        btnEmpezar.classList.add('hide');
+        this.nivel = 1;
+        this.colores = {
+            celeste, violeta, naranja, verde
+        }
     }
 
     generarSecuencia() {
@@ -25,6 +26,7 @@ const verde = document.getElementById('verde');
 
     siguienteNivel() {
         this.iluminarSecuencia();
+        this.agregarEventosClick();
     }
 
     transformarNumeroAColor(num) {
@@ -54,6 +56,17 @@ const verde = document.getElementById('verde');
 
     apagarColor(color) {
         this.colores[color].classList.remove('light');
+    }
+
+    agregarEventosClick() {
+        this.colores.celeste.addEventListener('click', this.elegirColor);
+        this.colores.verde.addEventListener('click', this.elegirColor);
+        this.colores.violeta.addEventListener('click', this.elegirColor);
+        this.colores.naranja.addEventListener('click', this.elegirColor);
+    }
+
+    elegirColor(event) {
+        console.log(this);
     }
 
   }
