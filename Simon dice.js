@@ -3,10 +3,11 @@ const celeste = document.getElementById('celeste');
 const violeta = document.getElementById('violeta');
 const naranja = document.getElementById('naranja');
 const verde = document.getElementById('verde');
-const ULTIMO_NIVEL = 10;
+const ULTIMO_NIVEL = 3;
 
   class Juego {
     constructor(){
+        this.inicializar = this.inicializar.bind(this);
         this.inicializar();
         this.generarSecuencia();
         setTimeout(() => {
@@ -16,10 +17,18 @@ const ULTIMO_NIVEL = 10;
 
     inicializar() {
         this.elegirColor = this.elegirColor.bind(this);
-        btnEmpezar.classList.add('hide');
+        this.toggleBtnEmpezar();
         this.nivel = 1;
         this.colores = {
             celeste, violeta, naranja, verde
+        }
+    }
+
+    toggleBtnEmpezar() {
+        if (btnEmpezar.classList.contains('hide')) {
+            btnEmpezar.classList.remove('hide');
+        } else {
+            btnEmpezar.classList.add('hide');
         }
     }
 
@@ -43,6 +52,19 @@ const ULTIMO_NIVEL = 10;
                 return 'verde';
             case 3:
                 return 'violeta';
+        }
+    }
+
+    transformarColorANumero(color) {
+        switch (color) {
+            case 'celeste':
+                return 0;
+            case 'naranja': 
+                return 1;
+            case 'verde': 
+                return 2;
+            case 'violeta':
+                return 3;
         }
     }
 
@@ -87,27 +109,35 @@ const ULTIMO_NIVEL = 10;
                 this.nivel++;
                 this.eliminarEventosClick();
                 if (this.nivel === (ULTIMO_NIVEL +1)) {
-                    //ganó!
+                    this.victoria();
                 } else {
                     setTimeout(this.siguienteNivel(), 1500);
                 }
             }
         } else {
-            //perdió
+            this.derrota();
         }
     }
 
-    transformarColorANumero(color) {
-        switch (color) {
-            case 'celeste':
-                return 0;
-            case 'naranja': 
-                return 1;
-            case 'verde': 
-                return 2;
-            case 'violeta':
-                return 3;
-        }
+    victoria() {
+        Swal.fire({
+            icon: 'success',
+            title: 'Victoria',
+            text: 'Felicidades, has ganado'
+          }).then(() => {
+              this.inicializar()
+          })
+    }
+
+    derrota() {
+        Swal.fire({
+            icon: 'error',
+            title: 'Perdiste',
+            text: 'Lo sentimos mucho, perdiste'
+          }).then(() => {
+              this.eliminarEventosClick();
+              this.inicializar();
+          })
     }
 
   }
